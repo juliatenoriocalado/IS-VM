@@ -3,8 +3,8 @@
 #include <string.h>
 
 int main(int argc, char *argv[]){
-    if (argc <3){
-        printf("Uso: ./vm <arquivo_enderecos> <fifo|lru>\n");
+    if (argc <4){
+        printf("Uso: ./vm <arquivo_enderecos> <fifo|lru> <fifo|lru>\n");
         return 1;
     }
 
@@ -16,6 +16,14 @@ int main(int argc, char *argv[]){
         algo_pagina = 1;
     }else{
         printf("Erro: Algoritmo invalido. Use 'fifo' ou 'lru'.\n");
+        return 1;
+    }
+
+    int algo_tlb = -1;
+    if (strcmp(argv[3], "fifo") == 0) algo_tlb = 0;
+    else if (strcmp(argv[3], "lru") == 0) algo_tlb = 1;
+    else{
+        printf("Erro: Algoritmo de TLB invalido. Use 'fifo' ou 'lru'.\n");
         return 1;
     }
 
@@ -48,11 +56,23 @@ int main(int argc, char *argv[]){
     int ultimo_uso_frame[128];
     for (int i=0; i<128; i++){
         frame_para_pagina[i] = -1;
+        ultimo_uso_frame[i] = 0;
+    }
+
+    int tlb_pagina[16];
+    int tlb_frame[16];
+    int tlb_ultimo_uso[16];
+    int tlb_ponteiro_fifo = 0;
+    for (int i=0; i<16; i++){
+        tlb_pagina[i] = -1;
+        tlb_frame[i] = -1;
+        tlb_ultimo_uso[i] = 0;
     }
 
     int endereco_logico;
     int contador = 0;
     int pagina_faltantes = 0;
+    int tlb_hits = 0; //contador de acertos na tlb
     int tempo_atual = 0;
 
     while (fscanf(arquivo_enderecos, "%d", &endereco_logico) == 1){
@@ -61,15 +81,32 @@ int main(int argc, char *argv[]){
         int numero_pagina = (endereco_logico >> 8) & 0xFF;
         int offset = endereco_logico & 0xFF;
 
-        int frame = tabela_paginas[numero_pagina];
+        int frame = -1;
+        int indice_tlb_usado = -1; //guarda qual gaveta tlb (0 a 15) foi usada
+
+        //busca sequencial na tlb (16 espaços)
+        for (int i=0; i<16; i++){
+            if (tlb_pagina[i] == numero_pagina){
+                frame = tlb_frame[i];
+                indice_tlb_usado = i;
+                tlb_hits++;
+                tlb_ultimo_uso[i] = tempo_atual;
+                break;
+            }
+        }
+
+        //se deu tlb miss o frame continua -1, e vai na tabela de paginas
 
         if (frame == -1){
-            pagina_faltantes++;
+            frame = tabela_paginas[numero_pagina];
 
-            if (memoria_cheia == 0){
-                //se ainda tiver espaço livre do 0 ao 127
-                frame = proximo_frame_livre;
-                proximo_frame_livre++;
+            if (frame == -1){
+                pagina_faltantes++;
+            
+                if (memoria_cheia == 0){
+                    //se ainda tiver espaço livre do 0 ao 127
+                    frame = proximo_frame_livre;
+                    proximo_frame_livre++;
                     if (proximo_frame_livre == 128){
                         memoria_cheia = 1;
                         proximo_frame_livre = 0;
@@ -94,8 +131,14 @@ int main(int argc, char *argv[]){
                     //vai expulsar a pagina antiga do frame
                     int pagina_antiga = frame_para_pagina[frame];
                     tabela_paginas[pagina_antiga] = -1;
-                }
 
+                    for (int i=0; i<16; i++){
+                        if (tlb_pagina[i] == pagina_antiga){
+                            tlb_pagina[i] = -1;
+                        }
+                    }
+                }
+ 
                 //busca no disco e grava o frame escolhido
                 fseek(disco_rigido, numero_pagina * 256, SEEK_SET); //vai no disco rigido na posicao exata da pagina
                 fread(&memoria_fisica[frame * 256], sizeof(signed char), 256, disco_rigido); //copia os 256 bytes do disco direto para a gaveta do frame da nossa ram //e anota a pagina onde mora o frame
@@ -104,18 +147,51 @@ int main(int argc, char *argv[]){
                 frame_para_pagina[frame] = numero_pagina;
             }
 
-            //atualizar relogio do lru
-            ultimo_uso_frame[frame] = tempo_atual;
+            //tlb miss, precisamos salvar a traduçaõ na tlb
+            //primeiro procura um espaço vazio (-1) na tlb
+            for (int i=0; i<16; i++){
+                if (tlb_pagina[i] == -1){
+                    indice_tlb_usado = i;
+                    break;
+                }
+            }
 
-            int endereco_fisico = (frame << 8) | offset;
-            signed char valor = memoria_fisica[frame * 256 + offset];
+            if (indice_tlb_usado == -1){
+                if (algo_tlb == 0){ //fifo na tlb
+                    indice_tlb_usado = tlb_ponteiro_fifo;
+                    tlb_ponteiro_fifo = (tlb_ponteiro_fifo + 1) % 16;
+                }else{
+                    int menor_tempo_tlb = tlb_ultimo_uso[0];
+                    indice_tlb_usado = 0;
+                    for (int i = 1; i<16; i++){
+                        if (tlb_ultimo_uso[i] < menor_tempo_tlb){
+                            menor_tempo_tlb = tlb_ultimo_uso[i];
+                            indice_tlb_usado = i;
+                        }
+                    }
+                }
+            }
 
-            contador++;
-
+            tlb_pagina[indice_tlb_usado] = numero_pagina;
+            tlb_frame[indice_tlb_usado] = frame;
+            tlb_ultimo_uso[indice_tlb_usado] = tempo_atual;
         }
 
-    printf("Total de enderecos lidos: %d\n", contador);
-    printf("Total de page faults (128 frames - %s): %d\n", argv[2], pagina_faltantes);
+        //atualizar relogio do lru
+        ultimo_uso_frame[frame] = tempo_atual;
+
+        int endereco_fisico = (frame << 8) | offset;
+        signed char valor = memoria_fisica[frame * 256 + offset];
+
+        contador++;
+
+    }
+        
+    printf("Number of Translated Addresses = %d\n", contador);
+    printf("Page Faults = %d\n", pagina_faltantes);
+    printf("Page Fault Rate = %.3f\n", (float)pagina_faltantes / contador);
+    printf("TLB Hits = %d\n", tlb_hits);
+    printf("TLB Hit Rate = %.3f\n", (float)tlb_hits / contador);
 
     fclose(arquivo_enderecos);
     fclose(disco_rigido);
