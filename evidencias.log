@@ -94,4 +94,37 @@ Endereco lido: 40185 -> pagina: 156 | offset (posicao dentro da pagina): 249
    16 |     *[01;31m[KFILE[m[K *disco_rigido = fopen("BACKING_STORE.bin", "rb"); //rb = leitura binária
       |      [01;31m[K^~~~[m[K
 [01m[Kvm.c:17:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kdisco_rigido[m[K’ undeclared (first use in this function)
-   17 |     if ([01;31m[Kdisco_rig
+   17 |     if ([01;31m[Kdisco_rigido[m[K == NULL){
+      |         [01;31m[K^~~~~~~~~~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;36m[Knote: [m[Keach undeclared identifier is reported only once for each function it appears in
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./vm addresses.txt
+[?2004lErro ao abrir BACKING_STORE.bin
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# git add vm.c
+[?2004l[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./vm address[K[K[K[K[K[K[K[K[K[K[K[Kwhia[K[Koami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# p[Kpwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 14:55:06 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./va[Km address.txt
+[?2004lErro ao abrir o arquivo address.txt
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 15:04:03 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# pwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# whoami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./vm adresses.txt
+[?2004lErro ao abrir o arquivo adresses.txt
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [7m./vm addresses.txt[27m./vm addresses.txt
+[?2004lErro ao abrir BACKING_STORE.bin
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./vm addresses.txt
+[?2004lTotal de enderecos lidos: 1000
+total de page faults (128 frames - FIFO): 538
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# f[Kgir[K[K[K[K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# exit
+[?2004lexit
+
+Script done on 2026-11-23 15:08:56-03:00 [COMMAND_EXIT_CODE="0"]
