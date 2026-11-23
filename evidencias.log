@@ -1,0 +1,97 @@
+Script started on 2026-11-23 13:06:31-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="111" LINES="9"]
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# whoami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 13:06:35 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# w[Kopwp[K[K[K[Kpwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K[A[K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 13:56:15 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# pwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# whoami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[01m[Kvm.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kvm.c:12:16:[m[K [01;35m[Kwarning: [m[Ktoo many arguments for format [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-extra-args-Wformat-extra-args]8;;[m[K]
+   12 |         printf([01;35m[K"Erro ao abrir o arquivo &s\n"[m[K, argv[1]);
+      |                [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# ./vm addresses.txt
+[?2004lEndereco lido: 16916 -> pagina: 66 | offset (posicao dentro da pagina): 20
+Endereco lido: 62493 -> pagina: 244 | offset (posicao dentro da pagina): 29
+Endereco lido: 30198 -> pagina: 117 | offset (posicao dentro da pagina): 246
+Endereco lido: 53683 -> pagina: 209 | offset (posicao dentro da pagina): 179
+Endereco lido: 40185 -> pagina: 156 | offset (posicao dentro da pagina): 249
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# [K]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# pwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# whoami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 14:09:42 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# pwd
+[?2004l/mnt/c/Users/julia/IS-VM
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# date
+[?2004lMon Nov 23 14:23:10 -03 2026
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# whoami
+[?2004lroot
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[01m[Kvm.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kvm.c:16:6:[m[K [01;31m[Kerror: [m[Kexpected expression before ‘[01m[KFILE[m[K’
+   16 |     *[01;31m[KFILE[m[K *disco_rigido = fopen("BACKING_STORE.bin", "rb"); //rb = leitura binária
+      |      [01;31m[K^~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kdisco_rigido[m[K’ undeclared (first use in this function)
+   17 |     if ([01;31m[Kdisco_rigido[m[K == NULL){
+      |         [01;31m[K^~~~~~~~~~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;36m[Knote: [m[Keach undeclared identifier is reported only once for each function it appears in
+[01m[Kvm.c:42:31:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K;[m[K’ before ‘[01m[Kframe[m[K’
+   42 |             pagina_faltantes++
+      |                               [01;31m[K^[m[K
+      |                               [32m[K;[m[K
+   43 |             [32m[Kframe[m[K = proximo_frame_livre;
+      |             [32m[K~~~~~[m[K              
+[01m[Kvm.c:51:32:[m[K [01;31m[Kerror: [m[K‘[01m[Kfraame[m[K’ undeclared (first use in this function); did you mean ‘[01m[Kframe[m[K’?
+   51 |         int endereco_fisico = ([01;31m[Kfraame[m[K << 8) | offset;
+      |                                [01;31m[K^~~~~~[m[K
+      |                                [32m[Kframe[m[K
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[01m[Kvm.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kvm.c:16:6:[m[K [01;31m[Kerror: [m[Kexpected expression before ‘[01m[KFILE[m[K’
+   16 |     *[01;31m[KFILE[m[K *disco_rigido = fopen("BACKING_STORE.bin", "rb"); //rb = leitura binária
+      |      [01;31m[K^~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kdisco_rigido[m[K’ undeclared (first use in this function)
+   17 |     if ([01;31m[Kdisco_rigido[m[K == NULL){
+      |         [01;31m[K^~~~~~~~~~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;36m[Knote: [m[Keach undeclared identifier is reported only once for each function it appears in
+[01m[Kvm.c:42:31:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K;[m[K’ before ‘[01m[Kframe[m[K’
+   42 |             pagina_faltantes++
+      |                               [01;31m[K^[m[K
+      |                               [32m[K;[m[K
+   43 |             [32m[Kframe[m[K = proximo_frame_livre;
+      |             [32m[K~~~~~[m[K              
+[01m[Kvm.c:51:32:[m[K [01;31m[Kerror: [m[K‘[01m[Kfaame[m[K’ undeclared (first use in this function); did you mean ‘[01m[Kframe[m[K’?
+   51 |         int endereco_fisico = ([01;31m[Kfaame[m[K << 8) | offset;
+      |                                [01;31m[K^~~~~[m[K
+      |                                [32m[Kframe[m[K
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[01m[Kvm.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kvm.c:16:6:[m[K [01;31m[Kerror: [m[Kexpected expression before ‘[01m[KFILE[m[K’
+   16 |     *[01;31m[KFILE[m[K *disco_rigido = fopen("BACKING_STORE.bin", "rb"); //rb = leitura binária
+      |      [01;31m[K^~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kdisco_rigido[m[K’ undeclared (first use in this function)
+   17 |     if ([01;31m[Kdisco_rigido[m[K == NULL){
+      |         [01;31m[K^~~~~~~~~~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;36m[Knote: [m[Keach undeclared identifier is reported only once for each function it appears in
+[01m[Kvm.c:42:31:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K;[m[K’ before ‘[01m[Kframe[m[K’
+   42 |             pagina_faltantes++
+      |                               [01;31m[K^[m[K
+      |                               [32m[K;[m[K
+   43 |             [32m[Kframe[m[K = proximo_frame_livre;
+      |             [32m[K~~~~~[m[K              
+[?2004h]0;root@PCdeJlia: /mnt/c/Users/julia/IS-VMroot@PCdeJlia:/mnt/c/Users/julia/IS-VM# gcc vm.c -o vm
+[?2004l[01m[Kvm.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kvm.c:16:6:[m[K [01;31m[Kerror: [m[Kexpected expression before ‘[01m[KFILE[m[K’
+   16 |     *[01;31m[KFILE[m[K *disco_rigido = fopen("BACKING_STORE.bin", "rb"); //rb = leitura binária
+      |      [01;31m[K^~~~[m[K
+[01m[Kvm.c:17:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kdisco_rigido[m[K’ undeclared (first use in this function)
+   17 |     if ([01;31m[Kdisco_rig
