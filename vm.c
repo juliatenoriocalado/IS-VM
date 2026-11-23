@@ -1,9 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int main(int argc, char *argv[]){
-    if (argc <2){
-        printf("Uso: ./vm <arquivo_enderecos>\n");
+    if (argc <3){
+        printf("Uso: ./vm <arquivo_enderecos> <fifo|lru>\n");
+        return 1;
+    }
+
+    //descobrir qual algotirmo foi digitado no terminal
+    int algo_pagina = -1; //0 = fifo ou 1 pra lru
+    if (strcmp(argv[2], "fifo") == 0){
+        algo_pagina = 0;
+    }else if (strcmp(argv[2], "lru") == 0){
+        algo_pagina = 1;
+    }else{
+        printf("Erro: Algoritmo invalido. Use 'fifo' ou 'lru'.\n");
         return 1;
     }
 
@@ -33,6 +45,7 @@ int main(int argc, char *argv[]){
     int memoria_cheia = 0;
 
     int frame_para_pagina[128];
+    int ultimo_uso_frame[128];
     for (int i=0; i<128; i++){
         frame_para_pagina[i] = -1;
     }
@@ -40,8 +53,11 @@ int main(int argc, char *argv[]){
     int endereco_logico;
     int contador = 0;
     int pagina_faltantes = 0;
+    int tempo_atual = 0;
 
     while (fscanf(arquivo_enderecos, "%d", &endereco_logico) == 1){
+        tempo_atual++;
+
         int numero_pagina = (endereco_logico >> 8) & 0xFF;
         int offset = endereco_logico & 0xFF;
 
@@ -50,38 +66,56 @@ int main(int argc, char *argv[]){
         if (frame == -1){
             pagina_faltantes++;
 
-            if (memoria_cheia == 1){
-                //fifo, o proximo frame livre agora funciona como uma fila circular (0 até 127)
-                int pagina_antiga = frame_para_pagina[proximo_frame_livre];
-                tabela_paginas[pagina_antiga] = -1; //avisa que a pagina antiga nao ta mais na ram
+            if (memoria_cheia == 0){
+                //se ainda tiver espaço livre do 0 ao 127
+                frame = proximo_frame_livre;
+                proximo_frame_livre++;
+                    if (proximo_frame_livre == 128){
+                        memoria_cheia = 1;
+                        proximo_frame_livre = 0;
+                    }    
+                }else{
+                    //memoria cheia
+                    if (algo_pagina == 0){
+                        //se for fifo
+                        frame = proximo_frame_livre;
+                        proximo_frame_livre = (proximo_frame_livre + 1) % 128;
+                    }else{
+                        //se for lru (procurar o frame com menor tempo de uso)
+                        int menor_tempo = ultimo_uso_frame[0];
+                        frame = 0;
+                        for (int i = 1; i < 128; i++){
+                            if (ultimo_uso_frame[i] < menor_tempo){
+                                menor_tempo = ultimo_uso_frame[i];
+                                frame = i;
+                            }
+                        }
+                    }
+                    //vai expulsar a pagina antiga do frame
+                    int pagina_antiga = frame_para_pagina[frame];
+                    tabela_paginas[pagina_antiga] = -1;
+                }
+
+                //busca no disco e grava o frame escolhido
+                fseek(disco_rigido, numero_pagina * 256, SEEK_SET); //vai no disco rigido na posicao exata da pagina
+                fread(&memoria_fisica[frame * 256], sizeof(signed char), 256, disco_rigido); //copia os 256 bytes do disco direto para a gaveta do frame da nossa ram //e anota a pagina onde mora o frame
+
+                tabela_paginas[numero_pagina] = frame;
+                frame_para_pagina[frame] = numero_pagina;
             }
 
-            frame = proximo_frame_livre;
-            proximo_frame_livre++; //avança o ponteiro, depois do 128 ele volta pra 0
-            if (proximo_frame_livre == 128){
-                memoria_cheia = 1;
-                proximo_frame_livre = 0;
-            }
+            //atualizar relogio do lru
+            ultimo_uso_frame[frame] = tempo_atual;
 
-            //busca no disco e grava o frame escolhido
-            fseek(disco_rigido, numero_pagina * 256, SEEK_SET); //vai no disco rigido na posicao exata da pagina
-            fread(&memoria_fisica[frame * 256], sizeof(signed char), 256, disco_rigido); //copia os 256 bytes do disco direto para a gaveta do frame da nossa ram //e anota a pagina onde mora o frame
+            int endereco_fisico = (frame << 8) | offset;
+            signed char valor = memoria_fisica[frame * 256 + offset];
 
-            //atualiza os dois mapas
-            tabela_paginas[numero_pagina] = frame;
-            frame_para_pagina[frame] = numero_pagina;
+            contador++;
 
         }
 
-        int endereco_fisico = (frame << 8) | offset; //so pra traducao e leitura do dado
-        signed char valor = memoria_fisica[frame * 256 + offset];
-
-        //printf("Virtual address: %d Physical address: %d Value: %d\n", endereco_logico, endereco_fisico, valor);
-        contador++;
-    }
-
     printf("Total de enderecos lidos: %d\n", contador);
-    printf("total de page faults (128 frames - FIFO): %d\n", pagina_faltantes);
+    printf("Total de page faults (128 frames - %s): %d\n", argv[2], pagina_faltantes);
 
     fclose(arquivo_enderecos);
     fclose(disco_rigido);
