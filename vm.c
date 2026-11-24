@@ -31,7 +31,7 @@ void* buscar_na_tlb_thread(void* arg) {
 }
 
 int main(int argc, char *argv[]){
-    if (argc <4){
+    if (argc != 4){
         printf("Uso: ./vm <arquivo_enderecos> <fifo|lru> <fifo|lru>\n");
         return 1;
     }
