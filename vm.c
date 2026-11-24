@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
 
     FILE *arquivo_saida = fopen("correct.txt", "w");
     if (arquivo_saida == NULL){
-        fprintf(stderr, "Erro: Nao foi possivel criar o arquivo corret.txt\n");
+        fprintf(stderr, "Erro: Nao foi possivel criar o arquivo correct.txt\n");
         fclose(arquivo_enderecos);
         fclose(disco_rigido);
         return 1;
@@ -234,6 +234,20 @@ int main(int argc, char *argv[]){
 
     }
 
+    if (contador == 0) {
+        fprintf(stderr, "Erro: o arquivo de enderecos esta vazio.\n");
+        fclose(arquivo_enderecos);
+        fclose(disco_rigido);
+        fclose(arquivo_saida);
+        return 1;
+    }
+
+    fprintf(arquivo_saida, "Number of Translated Addresses = %d\n", contador);
+    fprintf(arquivo_saida, "Page Faults = %d\n", pagina_faltantes);
+    fprintf(arquivo_saida, "Page Fault Rate = %.3f\n", (float)pagina_faltantes / contador);
+    fprintf(arquivo_saida, "TLB Hits = %d\n", tlb_hits);
+    fprintf(arquivo_saida, "TLB Hit Rate = %.3f\n", (float)tlb_hits / contador);
+
     printf("Number of Translated Addresses = %d\n", contador);
     printf("Page Faults = %d\n", pagina_faltantes);
     printf("Page Fault Rate = %.3f\n", (float)pagina_faltantes / contador);
@@ -242,5 +256,6 @@ int main(int argc, char *argv[]){
   
     fclose(arquivo_enderecos);
     fclose(disco_rigido);
+    fclose(arquivo_saida);
     return 0;
 }
